@@ -5,6 +5,36 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>備品在庫管理 - Liquid Glass Edition</title>
     <style>
+        /* --- Discord設定 --- */
+const DISCORD_WEBHOOK_URL = 'https://discord.com/api/webhooks/1494716034492661830/kYNxw6A3TuCHQFLga663fnUS2ajU-e-Vx0f-t_b_pWJiDm5bMgNogl_Qu9D2F3btO6hA';
+
+/* Discord送信用の共通関数 */
+async function sendToDiscord(action, details) {
+    if (!DISCORD_WEBHOOK_URL || DISCORD_WEBHOOK_URL.includes('ここに')) return;
+
+    const payload = {
+        embeds: [{
+            title: "📋 在庫システム操作ログ",
+            color: 3447003, // Blue
+            fields: [
+                { name: "操作ユーザー", value: `👤 ${currentUsername || 'Unknown'}`, inline: true },
+                { name: "アクション", value: `⚡ ${action}`, inline: true },
+                { name: "詳細内容", value: details }
+            ],
+            footer: { text: "System Clock: 2026-04-18 00:04:10" }
+        }]
+    };
+
+    try {
+        await fetch(DISCORD_WEBHOOK_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        });
+    } catch (err) {
+        console.error("Discordへの送信に失敗しました", err);
+    }
+}
         /* === Liquid Glass 変数 === */
         :root {
             --app-bg: #e8eaed;
