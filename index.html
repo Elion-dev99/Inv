@@ -996,6 +996,17 @@ async function sendToDiscord(action, details) {
                             editModal.style.display = 'flex'; setTimeout(() => editModal.classList.add('active'), 10);
                         });
                     }
+    function deleteInventoryItem(index) {
+    const item = inventory[index]; // 削除前に名前を確保
+    if (!confirm(`${item.name} を削除しますか？`)) return;
+    
+    inventory.splice(index, 1);
+    saveInventory();
+    renderInventory();
+    
+    // ★追記
+    sendToDiscord("在庫削除", `商品: ${item.name} が削除されました。`);
+}
 
                 } else {
                     li.innerHTML = `
@@ -1018,6 +1029,31 @@ async function sendToDiscord(action, details) {
             container.appendChild(ul);
         });
     }
+    /* --- 1020行目付近に追加 --- */
+const DISCORD_WEBHOOK_URL = 'https://discord.com/api/webhooks/1494716034492661830/kYNxw6A3TuCHQFLga663fnUS2ajU-e-Vx0f-t_b_pWJiDm5bMgNogl_Qu9D2F3btO6hA';
+
+async function sendToDiscord(action, details) {
+    if (!DISCORD_WEBHOOK_URL) return;
+    const payload = {
+        embeds: [{
+            title: "📋 在庫システム操作ログ",
+            color: 3447003,
+            fields: [
+                { name: "操作ユーザー", value: `👤 ${currentUsername || '不明'}`, inline: true },
+                { name: "アクション", value: `⚡ ${action}`, inline: true },
+                { name: "詳細内容", value: details }
+            ],
+            footer: { text: "System Clock: 2026-04-18 00:31:00" }
+        }]
+    };
+    try {
+        await fetch(DISCORD_WEBHOOK_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        });
+    } catch (err) { console.error("Discord送信失敗", err); }
+}
 
     function loadInventory() {
         const q = query(collection(db, "inventoryItems"), orderBy("createdAt", "desc"));
@@ -1049,6 +1085,32 @@ async function sendToDiscord(action, details) {
             if (locationContainer) renderItems(locationContainer, allItems, 'location', locArray, false);
         });
     }
+    function addOrder() {
+    // ...既存の処理（在庫減算など）...
+    orders.push(newOrder);
+    saveOrders();
+    saveInventory();
+    renderOrderList();
+    renderInventory();
+    
+    // ★追記
+    sendToDiscord("新規注文/出庫", `商品: ${itemName}\n数量: ${quantity}\n備考: ${notes || 'なし'}`);
+    
+    // ...モーダルを閉じる処理...
+}
+
+
+    function addInventory() {
+    // ...既存の処理...
+    inventory.push(newItem);
+    saveInventory();
+    renderInventory();
+    
+    // ★追記
+    sendToDiscord("在庫新規登録", `商品: ${name}\n初期在庫: ${stock}${unit}\nカテゴリ: ${category}`);
+    
+    // ...モーダルを閉じる処理...
+}
 
     function loadUsers() {
         const q = query(collection(db, "users"));
