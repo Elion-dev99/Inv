@@ -999,7 +999,7 @@ onAuthStateChanged(auth, async (user) => {
         loginScreen.classList.remove('active'); registerScreen.classList.remove('active');
         setTimeout(() => { loginScreen.style.display = 'none'; registerScreen.style.display = 'none'; }, 500);
 
-        loadOrderList(); loadInventory(); loadUsers(); loadMessages();
+        loadOrderList(); loadInventory(); loadUsers(); setupUnreadListener();
 
         document.getElementById('admin-section').style.display = (currentUserRole === 'admin' || currentUserRole === 'owner') ? 'block' : 'none';
         switchTab('list');
