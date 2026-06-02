@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>Debug Mode Login</title>
+  <style>
+    body {
+      font-family: "Segoe UI", sans-serif;
+      background: #f5f7fa;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+    .container {
+      width: 360px;
+      background: white;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+    }
+    h2 {
+      text-align: center;
+      margin-bottom: 20px;
+      font-weight: 600;
+    }
+    .google-btn {
+      width: 100%;
+      padding: 12px;
+      background: #4285F4;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-size: 15px;
+      cursor: pointer;
+    }
+    .google-btn:hover {
+      background: #357ae8;
+    }
+    .otp-area {
+      margin-top: 25px;
+      display: none;
+    }
+    input {
+      width: 100%;
+      padding: 12px;
+      margin-top: 10px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 15px;
+    }
+    .otp-btn {
+      width: 100%;
+      padding: 12px;
+      background: #222;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      margin-top: 15px;
+      cursor: pointer;
+    }
+    .otp-btn:hover {
+      background: #000;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <h2>デバックモード</h2>
+
+  <button class="google-btn">Googleでログイン</button>
+
+  <div class="otp-area" id="otpArea">
+    <h3>OTP 認証</h3>
+    <input type="text" placeholder="6桁のコード" />
+    <button class="otp-btn">認証する</button>
+  </div>
+</div>
+
+<script>
+  // UIデモ用：Googleログインボタンを押したらOTP欄を表示
+  document.querySelector(".google-btn").onclick = () => {
+    document.getElementById("otpArea").style.display = "block";
+  };
+</script>
+
+</body>
+</html>
